@@ -50,4 +50,8 @@ touch {log_file}
         new_line = f"""{is_db_not_in_log} && {cmd} && {add_db_to_log}\n"""
         f.write(new_line)
 
+    new_line = f"""wget -O humandb/hg38_kgXref.txt.gz http://disq.us/url?url=http%3A%2F%2Fhgdownload.cse.ucsc.edu%2FgoldenPath%2Fhg38%2Fdatabase%2FkgXref.txt.gz%3AJOOPG7r3TBmXFDXTMT97B9XvO34&cuid=3494157\n"""
+    new_line += f"""gzip -d humandb/hg38_kgXref.txt.gz"""
+    f.write(new_line)
+
 print(f"# bash {cmd_file}")
