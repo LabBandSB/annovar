@@ -3,8 +3,8 @@ import os
 
 ANNOVAR_HOME = "/home/PublicData/annovar_src/annovar_2019Oct24/"
 
-table_annovar = f"perl ANNOVAR_HOME/table_annovar.pl"
-annovar_db_folder = f"ANNOVAR_HOME/humandb"
+table_annovar = f"perl {ANNOVAR_HOME}/table_annovar.pl"
+annovar_db_folder = f"{ANNOVAR_HOME}/humandb"
 
 db_gene = [
     "refGene",

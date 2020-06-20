@@ -58,8 +58,8 @@ log_file = "download_annovar_hg19.completed.log"
 cmd_file = "run_download_annovar_hg19.sh"
 with open(cmd_file, "w") as f:
     new_line = f"""
-    export PATH=ANNOVAR_HOME:$PATH
-    cd ANNOVAR_HOME
+    export PATH={ANNOVAR_HOME}:$PATH
+    cd {ANNOVAR_HOME}
     touch {log_file}
     \n
     """
