@@ -1,4 +1,4 @@
-ANNOVAR_HOME = "/home/PublicData/annovar_src/annovar_20190101/"
+ANNOVAR_HOME = "/home/PublicData/annovar_src/annovar_2019Oct24/"
 
 # order from https://doc-openbio.readthedocs.io/projects/annovar/en/latest/user-guide/download/
 db_gene = [
