@@ -53,7 +53,7 @@ cadd13
 fathmm
 gwava
 eigen"""
-db_filter = [i.strip() for i in db_gene.split('\n')]
+db_filter = [i.strip() for i in db_filter.split('\n')]
 
 db_order = list()
 # genes block
