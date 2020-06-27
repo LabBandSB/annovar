@@ -60,7 +60,7 @@ db_filter = [
 
 # to load db from ANNOVAR_HOME/humabdb instead of using default list
 if True:
-    from .get_annovar_db_from_humandb_dir import make_db_gene, make_db_filter
+    from get_annovar_db_from_humandb_dir import make_db_gene, make_db_filter
 
     db_gene = make_db_gene()
     db_filter = make_db_filter()
