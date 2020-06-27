@@ -86,7 +86,7 @@ def make_db_filter():
         if db in db_list:
             db_list[db_list.index(db)] = ""  # erase found item
     # erase ignored db
-    for db in db_ignore():
+    for db in db_ignore:
         if db in db_list:
             db_list[db_list.index(db)] = ""  # erase found item
     # filters block in wanted order
