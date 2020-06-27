@@ -1,19 +1,15 @@
 # bash run_annovar_full.sh VCF_FILE
 
-
 input_file=${1}
 output_file=${input_file}_ANNOVAR_FULL
-
 
 table_annovar="perl /home/PublicData/annovar_src/annovar_20190101/table_annovar.pl"
 convert2annovar="perl /home/PublicData/annovar_src/annovar_20190101/convert2annovar.pl"
 annovar_db_folder="/home/PublicData/annovar_src/annovar_20190101/humandb"
 
-
 db_gene="refGene
 knownGene
 ensGene"
-
 
 db_filter="snp138
 avsnp138
@@ -56,20 +52,18 @@ fathmm
 gwava
 eigen"
 
-
 protocol=""
 operation=""
-for p in $db_gene;do
-    protocol="${protocol},${p}"
-    operation="${operation},g"
+for p in $db_gene; do
+  protocol="${protocol},${p}"
+  operation="${operation},g"
 done
-for p in $db_filter;do
-    protocol="${protocol},${p}"
-    operation="${operation},f"
+for p in $db_filter; do
+  protocol="${protocol},${p}"
+  operation="${operation},f"
 done
 protocol="${protocol/,/}"
 operation="${operation/,/}"
-
 
 echo "
 ${table_annovar} \
@@ -84,4 +78,4 @@ ${table_annovar} \
         --onetranscript \
         --nastring '.' \
         --vcfinput
-" > run_annovar_20190101.${input_file}.sh
+" >run_annovar_20190101.${input_file}.sh

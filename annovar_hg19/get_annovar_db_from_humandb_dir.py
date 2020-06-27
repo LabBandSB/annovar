@@ -7,6 +7,7 @@ HUMANDB_HOME = os.path.join(ANNOVAR_HOME, "humandb")
 # scan block, what we have
 db_list = [i[5:-4] for i in os.listdir(HUMANDB_HOME) if i.startswith("hg19_") and i.endswith(".txt")]
 
+
 def make_db_gene():
     # what we want
     db_gene = """refGene
@@ -20,6 +21,7 @@ def make_db_gene():
             db_order.append(db)
     # return db_order
     return db_order
+
 
 def make_db_filter():
     db_filter = """snp138
@@ -73,7 +75,7 @@ def make_db_filter():
     for db in db_filter:
         if db in db_list:
             db_order.append(db)
-            db_list[db_list.index(db)] = "" # erase found item
+            db_list[db_list.index(db)] = ""  # erase found item
     # remainder block, recall last 3 elements are fathmm, gwava, eigen
     for db in db_list:
         if db:
@@ -81,9 +83,10 @@ def make_db_filter():
     # return db_order
     return db_order
 
+
 if __name__ == '__main__':
     db_gene = make_db_gene()
     db_filter = make_db_filter()
     # print block
     db_str = '"' + '\n'.join(db_gene + db_filter) + '"'
-    print (db_str)
+    print(db_str)

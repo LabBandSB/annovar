@@ -58,7 +58,7 @@ db_filter = [
     "eigen",
 ]
 
-# to load db from ANNOVAR_HOME instead of using default list
+# to load db from ANNOVAR_HOME/humabdb instead of using default list
 if True:
     from .get_annovar_db_from_humandb_dir import make_db_gene, make_db_filter
 
