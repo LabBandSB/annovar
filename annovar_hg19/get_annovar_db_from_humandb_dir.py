@@ -24,7 +24,8 @@ def make_db_gene():
 
 
 def make_db_filter():
-    db_filter = """snp138
+    db_filter = """
+    snp138
     avsnp138
     avsnp150
     ALL.sites.2015_08
@@ -63,12 +64,29 @@ def make_db_filter():
     cadd13
     fathmm
     gwava
-    eigen"""
+    eigen
+    gnomad211_exome
+    ljb26_all
+    dbnsfp35c"""
     db_filter = [i.strip() for i in db_filter.split('\n')]
+
+    db_ignore = """
+    example_db_generic
+    intervar_20180118
+    example_db_gff3
+    refGeneVersion
+    gene4denovo201907
+    refGeneWithVer
+    MT_ensGene"""
+    db_ignore = [i.strip() for i in db_ignore.split('\n')]
 
     db_order = list()
     # erase db_gene items from db_list
     for db in make_db_gene():
+        if db in db_list:
+            db_list[db_list.index(db)] = ""  # erase found item
+    # erase ignored db
+    for db in db_ignore():
         if db in db_list:
             db_list[db_list.index(db)] = ""  # erase found item
     # filters block in wanted order
