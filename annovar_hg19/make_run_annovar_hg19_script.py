@@ -85,7 +85,7 @@ def main():
         --protocol {protocol} \
         --operation {operation}  \
         --outfile {output_file} \
-        --buildver hg38 \
+        --buildver hg19 \
         --remove \
         --otherinfo \
         --onetranscript \
