@@ -10,10 +10,12 @@ db_list = [i[5:-4] for i in os.listdir(HUMANDB_HOME) if i.startswith("hg19_") an
 
 def make_db_gene():
     # what we want
-    db_gene = """refGene
+    db_gene = """
+    refGene
     knownGene
-    ensGene"""
-    db_gene = [i.strip() for i in db_gene.split('\n')]
+    ensGene
+    """
+    db_gene = [i.strip() for i in db_gene.split('\n') if i.strip()]
     # get what we want from what we have
     db_order = list()
     for db in db_gene:
@@ -67,8 +69,9 @@ def make_db_filter():
     eigen
     gnomad211_exome
     ljb26_all
-    dbnsfp35c"""
-    db_filter = [i.strip() for i in db_filter.split('\n')]
+    dbnsfp35c
+    """
+    db_filter = [i.strip() for i in db_filter.split('\n') if i.strip()]
 
     db_ignore = """
     example_db_generic
@@ -77,8 +80,9 @@ def make_db_filter():
     refGeneVersion
     gene4denovo201907
     refGeneWithVer
-    MT_ensGene"""
-    db_ignore = [i.strip() for i in db_ignore.split('\n')]
+    MT_ensGene
+    """
+    db_ignore = [i.strip() for i in db_ignore.split('\n') if i.strip()]
 
     db_order = list()
     # erase db_gene items from db_list
