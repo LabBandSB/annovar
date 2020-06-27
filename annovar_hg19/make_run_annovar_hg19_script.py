@@ -1,17 +1,20 @@
 import argparse
 import os
+import datetime
 
 ANNOVAR_HOME = "/home/PublicData/annovar_src/annovar_2019Oct24/"
 
 table_annovar = f"perl {ANNOVAR_HOME}/table_annovar.pl"
 annovar_db_folder = f"{ANNOVAR_HOME}/humandb"
 
+# edit if necessary
 db_gene = [
     "refGene",
     "knownGene",
     "ensGene",
 ]
 
+# edit if necessary
 db_filter = [
     "snp138",
     "avsnp138",
@@ -55,6 +58,13 @@ db_filter = [
     "eigen",
 ]
 
+# to load db from ANNOVAR_HOME instead of using default list
+if True:
+    from .get_annovar_db_from_humandb_dir import make_db_gene, make_db_filter
+
+    db_gene = make_db_gene()
+    db_filter = make_db_filter()
+
 protocol = ",".join(db_gene + db_filter)
 operation = ",".join(["g"] * len(db_gene) + ["f"] * len(db_filter))
 
@@ -82,9 +92,20 @@ def main():
         --nastring '.' \
         --vcfinput
     """
-    cmd_file = input_file_prefix + '.RUN_ANNOVAR_hg19.sh'
+    now = datetime.datetime.now().strftime("%y%m%d_%H%M")
+    # option 1 to save at working dir
+    cmd_file = at_working_dir = input_file_prefix + '.RUN_ANNOVAR_hg19_' + now + '_.sh'
     with open(cmd_file, "w") as f:
         f.write(cmd)
+    # option 2 to save at current dir
+    cmd_file = at_current_dir = 'run_annovar_hg19_' + now + '_.sh'
+    with open(cmd_file, "w") as f:
+        f.write(cmd)
+    #
+    print(f"# bash {at_working_dir}")
+    print(f"# nohup bash {at_working_dir} &")
+    print(f"# bash {at_current_dir}")
+    print(f"# nohup bash {at_current_dir} &")
 
 
 if __name__ == '__main__':

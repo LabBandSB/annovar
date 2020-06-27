@@ -72,3 +72,4 @@ with open(cmd_file, "w") as f:
         f.write(new_line)
 
 print(f"# bash {cmd_file}")
+print(f"# nohup bash {cmd_file} & ")
