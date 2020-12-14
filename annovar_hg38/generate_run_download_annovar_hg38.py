@@ -1,14 +1,18 @@
+from datetime import datetime
+
+yyyymmdd = datetime.today().strftime('%Y%m%d')
+
 ANNOVAR_HOME = '/home/PublicData/annovar_src/annovar_2019Oct24'
 
 db_gene_file = '../annovar_db_gene_list.txt'
-db_gene = [i.strip() for i in open(db_gene_file) if i.strip()]
+db_gene = [i.strip() for i in open(db_gene_file) if i.strip() and not i.startswith('#') ]
 
 db_filter_file = '../annovar_db_filter_list.txt'
-db_filter = [i.strip() for i in open(db_filter_file) if i.strip()]
+db_filter = [i.strip() for i in open(db_filter_file) if i.strip() and not i.startswith('#') ]
 
 db_list = db_gene + db_filter
 
-log_file = 'download_annovar_hg38.completed.log'
+log_file = f'download_annovar_hg38.completed_{yyyymmdd}.log'
 cmd_file = 'run_download_annovar_hg38.sh'
 with open(cmd_file, 'w') as f:
     new_line = f'''
