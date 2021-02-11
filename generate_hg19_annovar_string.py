@@ -89,7 +89,7 @@ def bash_annovar(input_vcf):
         --nastring "."
         --vcfinput
     """
-    cmd = cmd.replace("\n", " \\\n").strip(" \\\n")
+    cmd = "\n\n" + cmd.replace("\n", " \\\n").strip(" \\\n")
     return cmd
 
 def generate_output_filename(in_file, suffix="out"):
