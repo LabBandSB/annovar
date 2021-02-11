@@ -1,5 +1,5 @@
-import argparse
 import os
+import argparse
 
 
 table_annovar = "perl /home/PublicData/annovar_src/annovar_20190101/table_annovar.pl"
@@ -21,7 +21,8 @@ def parse_arguments_to_settings():
 
 
 def bash_annovar(input_vcf):
-    output_vcf = generate_output_filename(input_vcf, ".FINAL.annovar" )
+    file_path, file_extension = os.path.splitext(input_vcf)
+    output_vcf = file_path + ".FINAL.annovar"
 
     db_gene = [
         "refGene",
@@ -91,11 +92,6 @@ def bash_annovar(input_vcf):
     """
     cmd = "\n\n" + cmd.replace("\n", " \\\n").strip(" \\\n")
     return cmd
-
-def generate_output_filename(in_file, suffix="out"):
-    import os
-    file_path, file_extension = os.path.splitext(in_file)
-    return file_path + "." + suffix + file_extension
 
 
 ###############################################################################
