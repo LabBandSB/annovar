@@ -7,18 +7,18 @@ annovar_db_folder = "/home/PublicData/annovar_src/annovar_20190101/humandb"
 
 token_start = """
 # lock sample to prevent runnig 2 times
-[ ! -f ${alignment_dir}/token.${sample}.__annovar_start__ ] && \
-touch ${alignment_dir}/token.${sample}.__annovar_start__ \
+[ ! -f {alignment_dir}/token.{sample}.__annovar_start__ ] && \
+touch {alignment_dir}/token.{sample}.__annovar_start__ \
 || exit 1
 
 # remove final lock to indicate that the pipeline is not ended 
-rm -f ${alignment_dir}/token.${sample}.__annovar_finish__ 
+rm -f {alignment_dir}/token.{sample}.__annovar_finish__ 
 dt1dt1=`date +%y%m%d_%H%M%S` 
 """
 
 token_finish = """
 dt2dt2=`date +%y%m%d_%H%M%S` && \
-echo ${dt1dt1} ${dt2dt2} > ${alignment_dir}/token.${sample}.__annovar_finish__ 
+echo $dt1dt1 $dt2dt2 > {alignment_dir}/token.{sample}.__annovar_finish__ 
 """
 
 
