@@ -36,7 +36,7 @@ def main():
 
 def generate_scripts_for_annovar(d):
     vcf_dir = d['vcf_dir']
-    vcf_suffix = d['vcf_dir']
+    vcf_suffix = d['vcf_suffix']
     script_dir = d['script_dir']
     for vcf in vcf_list_generator(vcf_dir, vcf_suffix):
         alignment_dir, sample_file = os.path.split(vcf)
@@ -75,7 +75,7 @@ def parse_arguments_to_settings():
     args = parser.parse_args()
     d = {
         "vcf": args.vcf,
-        "vcf_dir": args.scan_dir,
+        "vcf_dir": args.vcf_dir,
         "vcf_suffix": args.vcf_suffix,
         "script_dir": args.script_dir,
     }
