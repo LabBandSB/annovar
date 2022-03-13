@@ -29,9 +29,9 @@ def main():
         cmd = bash_annovar(vcf)
         print(cmd)
     else:
-        scripts_dir = d['scripts_dir']
+        script_dir = d['script_dir']
         generate_scripts_for_annovar(d)
-        print(f"# cd {scripts_dir}")
+        print(f"# cd {script_dir}")
 
 
 def generate_scripts_for_annovar(d):
