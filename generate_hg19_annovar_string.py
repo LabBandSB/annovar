@@ -47,6 +47,8 @@ def generate_scripts_for_annovar(d):
             f.write(new_line)
             new_line = bash_annovar(vcf) + "\n"
             f.write(new_line)
+            new_line = "echo DONE at `date +%y%m%d_%H%M%S` "
+            f.write(new_line)
             new_line = token_finish.format(alignment_dir=alignment_dir, sample=sample) + "\n"
             f.write(new_line)
 
