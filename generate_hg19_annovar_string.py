@@ -5,21 +5,22 @@ table_annovar = "perl /home/PublicData/annovar_src/annovar_20190101/table_annova
 convert2annovar = "perl /home/PublicData/annovar_src/annovar_20190101/convert2annovar.pl"
 annovar_db_folder = "/home/PublicData/annovar_src/annovar_20190101/humandb"
 
-token_start = """
-# lock sample to prevent runnig 2 times
-[ ! -f {alignment_dir}/token.{sample}.__annovar_start__ ] && \
-touch {alignment_dir}/token.{sample}.__annovar_start__ \
-|| exit 1
-
-# remove final lock to indicate that the pipeline is not ended 
-rm -f {alignment_dir}/token.{sample}.__annovar_finish__ 
-dt1dt1=`date +%y%m%d_%H%M%S` 
-"""
-
-token_finish = """
-dt2dt2=`date +%y%m%d_%H%M%S` && \
-echo $dt1dt1 $dt2dt2 > {alignment_dir}/token.{sample}.__annovar_finish__ 
-"""
+cmd_pipeline = '''
+token="{alignment_dir}/token.{sample}.vcf_2_vcf_txt_annovar"
+input_file="{alignment_dir}/{sample}.FINAL.vcf"
+output_file="{alignment_dir}/{sample}.FINAL.annovar"
+[ ! -f ${{token}} ] && \
+[ -f ${{input_file}} ] && \
+rm -f ${{output_file}} && \
+dt1=`date +%y%m%d_%H%M%S` && \
+echo ${{dt1}} ${{token}} && \
+{cmd} && \
+du ${{output_file}} > ${{output_file}}.${{dt1}}.du && \
+md5sum ${{output_file}} > ${{output_file}}.${{dt1}}.md5 && \
+dt2=`date +%y%m%d_%H%M%S` && \
+echo ${{dt1}} ${{dt2}} > ${{token}} \
+|| echo "TOKEN SKIPPED ${{token}}"
+'''
 
 
 def main():
@@ -32,40 +33,6 @@ def main():
         script_dir = d['script_dir']
         generate_scripts_for_annovar(d)
         print(f"# cd {script_dir}")
-
-
-def generate_scripts_for_annovar(d):
-    vcf_dir = d['vcf_dir']
-    vcf_suffix = d['vcf_suffix']
-    script_dir = d['script_dir']
-    for vcf in vcf_list_generator(vcf_dir, vcf_suffix):
-        alignment_dir, sample_file = os.path.split(vcf)
-        sample = sample_file.split(".")[0]
-        sh_file = f"{script_dir}/{sample}.annovar_hg19.sh"
-        with open(sh_file, "w") as f:
-            new_line = token_start.format(alignment_dir=alignment_dir, sample=sample) + "\n"
-            f.write(new_line)
-            new_line = bash_annovar(vcf) + "\n"
-            f.write(new_line)
-            new_line = "echo DONE at `date +%y%m%d_%H%M%S` "
-            f.write(new_line)
-            new_line = token_finish.format(alignment_dir=alignment_dir, sample=sample) + "\n"
-            f.write(new_line)
-
-
-def get_files_generator(dirs_list, extension=""):
-    for path in dirs_list:
-        for data_file in os.listdir(path):
-            if data_file:
-                data_path = os.path.join(path, data_file)
-                if os.path.isfile(data_path) and data_path.endswith(extension):
-                    yield data_path
-                elif os.path.isdir(data_path):
-                    yield from get_files_generator([data_path], extension)
-
-
-def vcf_list_generator(dir, suffix):
-    yield from get_files_generator([dir], extension=suffix)
 
 
 def parse_arguments_to_settings():
@@ -86,7 +53,7 @@ def parse_arguments_to_settings():
 
 def bash_annovar(input_vcf):
     file_path, file_extension = os.path.splitext(input_vcf)
-    output_vcf = file_path + ".FINAL.annovar"
+    output_vcf = file_path + ".LATEST.annovar"
 
     db_gene = [
         "refGene",
@@ -156,6 +123,36 @@ def bash_annovar(input_vcf):
     """
     cmd = "\n\n" + cmd.replace("\n", " \\\n").strip(" \\\n")
     return cmd
+
+
+def generate_scripts_for_annovar(d):
+    vcf_dir = d['vcf_dir']
+    vcf_suffix = d['vcf_suffix']
+    script_dir = d['script_dir']
+    for vcf in vcf_list_generator(vcf_dir, vcf_suffix):
+        alignment_dir, sample_file = os.path.split(vcf)
+        sample = sample_file.split(".")[0]
+        sh_file = f"{script_dir}/{sample}.annovar_hg19.sh"
+        with open(sh_file, "w") as f:
+            cmd_line = new_line = bash_annovar(vcf).strip()
+            new_line = cmd_pipeline.format(
+                alignment_dir=alignment_dir, sample=sample, cmd=cmd_line) + "\n"
+            f.write(new_line)
+
+
+def vcf_list_generator(dir, suffix):
+    yield from get_files_generator([dir], extension=suffix)
+
+
+def get_files_generator(dirs_list, extension=""):
+    for path in dirs_list:
+        for data_file in os.listdir(path):
+            if data_file:
+                data_path = os.path.join(path, data_file)
+                if os.path.isfile(data_path) and data_path.endswith(extension):
+                    yield data_path
+                elif os.path.isdir(data_path):
+                    yield from get_files_generator([data_path], extension)
 
 
 ###############################################################################
