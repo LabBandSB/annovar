@@ -5,6 +5,24 @@ table_annovar = "perl /home/PublicData/annovar_src/annovar_20190101/table_annova
 convert2annovar = "perl /home/PublicData/annovar_src/annovar_20190101/convert2annovar.pl"
 annovar_db_folder = "/home/PublicData/annovar_src/annovar_20190101/humandb"
 
+token_start = """
+# lock sample to prevent runnig 2 times
+[ ! -f {alignment_dir}/token.{sample}.__annovar_start__ ] && \
+touch {alignment_dir}/token.{sample}.__annovar_start__ \
+|| exit 1
+
+# remove final lock to indicate that the pipeline is not ended 
+rm -f {alignment_dir}/token.{sample}.__annovar_finish__ 
+dt1dt1=`date +%y%m%d_%H%M%S` 
+
+"""
+
+token_finish = """
+
+dt2dt2=`date +%y%m%d_%H%M%S` && \
+echo $dt1dt1 $dt2dt2 > {alignment_dir}/token.{sample}.__annovar_finish__ 
+"""
+
 cmd_pipeline = '''
 token="{alignment_dir}/token.{sample}.vcf_2_vcf_txt_annovar"
 input_file="{alignment_dir}/{sample}.FINAL.vcf"
@@ -134,9 +152,13 @@ def generate_scripts_for_annovar(d):
         sample = sample_file.split(".")[0]
         sh_file = f"{script_dir}/{sample}.annovar_hg19.sh"
         with open(sh_file, "w") as f:
-            cmd_line = new_line = bash_annovar(vcf).strip()
+            new_line = token_start.format(alignment_dir=alignment_dir, sample=sample) + "\n"
+            f.write(new_line)
+            cmd_line = bash_annovar(vcf).strip()
             new_line = cmd_pipeline.format(
                 alignment_dir=alignment_dir, sample=sample, cmd=cmd_line) + "\n"
+            f.write(new_line)
+            new_line = token_finish.format(alignment_dir=alignment_dir, sample=sample) + "\n"
             f.write(new_line)
 
 
