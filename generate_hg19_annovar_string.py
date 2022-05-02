@@ -7,6 +7,10 @@ annovar_db_folder = "/home/PublicData/annovar_src/annovar_20190101/humandb"
 
 token_start = """
 # lock sample to prevent runnig 2 times
+# check 1 output file 
+[ -f {alignment_dir}/{sample}.FINAL.LATEST.annovar.hg19_multianno.txt ] && echo "{sample} already annovared, skipping..." && exit 1
+
+# check 2 token
 [ ! -f {alignment_dir}/token.{sample}.__annovar_start__ ] && \
 touch {alignment_dir}/token.{sample}.__annovar_start__ \
 || exit 1
